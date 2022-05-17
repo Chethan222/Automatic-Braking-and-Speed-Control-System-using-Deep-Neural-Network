@@ -1,0 +1,94 @@
+We developed a system that learns the entire processing pipeline needed to predict the  speed of the vehicle. 
+
+
+Training :
+Training data contains images sampled from the video, 
+paired with the corresponding speed and brake value. 
+Training with data from only the human driver is not sufficient;
+the network must also learn how to recover from any mistakes.
+The training data is therefore augmented with additional images
+that show the car in different shifts from the center of the lane
+and rotations from the direction of the road.
+
+Images are fed into a CNN that then computes a speed and brake value. The predicted speed is compared to the desired speed for that image, and the weights of the CNN are adjusted to bring the CNN output closer to the desired output. The weight adjustment is accomplished using back propagation. Once trained, the network is able to predict speed from the video images of a single center camera.
+
+Data Collection
+Training data was collected by driving the vehicle on tar road for a distance about 6-7 kms.
+The data was acquired using Maruti Suzuki Baleno . Our system has no dependencies on any particular vehicle make or model.
+The trianing data has to be collected with a diverse set of lighting and weather conditions.
+We gathered from nearby roads. Other road types include highways, concrete roads and roads with lane markings, residential roads with parked cars.
+
+Data Selection
+The first step to training a neural network is selecting the frames to use. To train a CNN to do lane following, we simply select data where the driver is staying in a lane, and discard the rest. We then sample that video at 10 FPS because a higher sampling rate would include images that are highly similar, and thus not provide much additional useful information. To remove a bias towards driving straight the training data includes a higher proportion of frames that represent road curves.
+
+
+Augmentation and preprocessing :
+# Cropping the image having only concentrated regions
+# Changing color space from RGB to YUV.
+It allows reduced bandwidth for chrominance component
+compared to RGB-representaion.
+
+YUV is a color model typically used as part of
+a color image pipeline.
+Y-Luminance : It represents the brightness with in the image.
+U,V -Chrominace components:
+U-Blue projection
+V-Red projection
+
+Chromiance channels representing the color of the pictures
+# Applying Blur
+# Resizing the image
+# Normalizing the image
+
+
+After selecting the final set of frames, 
+
+# Panning the image
+# Zooming on the the region of interest
+# Changing the brightness of the image
+# Flipping the image
+
+we augment the data by adding artificial shifts and rotations to teach 
+the network how to recover from a poor position or orientation. 
+The magnitude of these perturbations is chosen randomly from a
+ normal distribution. The distribution has zero mean, and 
+the standard deviation is twice the standard deviation that
+ we measured with human drivers. Artificially augmenting the data 
+does add undesirable artifacts as the magnitude increases.
+
+Training and Optimization :
+We train the weights of our network to minimize the mean-squared 
+error between the speed value output by the network and actual speed 
+value.
+The loss function used here is Mean Squared Error Loss(MSEloss).
+and the optimization algorithm is Adaptive moment estimation ADAM
+Have faster computaion time, and require fewer parameteres for tuning
+
+It combines the advantages of SGD and AdaGrad (Adaptive Gradient ALgoirithm)
+
+We have used elu as an activation function.Exponential Linear Unit(Elu) is an activation function for neural networks.
+ELU's have negative values which alows them to push mean unit activation close yo zero like batch normalization
+but with the lower computaional complexity.
+
+Architecture:
+Figure 5 shows the network architecture, which consists of 9 layers,
+ including a normalization layer, 5 convolutional layers, and 
+3 fully connected layers. The input image is split into YUV planes and passed to the network.
+
+We follow the five convolutional layers with three fully connected layers, leading to a final output control value 
+
+The network has about 27 million connections and 250 thousand parameters.
+The first layer of the network performs image normalization.
+Performing normalization in the network allows a) There are both positive and negative values used as inputs for the next 
+layer which makes learning more flexible 
+b)The network's learning regards all input features to a similar extent. to be accelerated via GPU processing.
+
+
+The convolutional layers are designed to perform feature extraction. It can assign various importance to various aspects/objects in the image 
+and able to differentiate one from the other. The role of the CNN layer is to reduce the images into a form which is easier 
+to processs, without loosing the features which are criticle for getting good prediction.
+ We then use strided convolutions in the first three convolutional layers with a 2×2 stride and a 5×5 kernel, and a non-strided convolution with a 3×3 kernel size in the final two convolutional layers.
+
+
+Evaluation
+We evaluate our networks  based on its prediction for the test sample and the further action may to be test eith the on road testing
