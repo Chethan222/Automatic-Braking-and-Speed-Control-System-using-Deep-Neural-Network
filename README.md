@@ -1,9 +1,27 @@
-#### AAutomatic Braking and Speed Control System using Deep Neural-Network.
+# Automatic Braking and Speed Control System using Deep Neural-Network.
 
-    Safety is a necessary part of man’s life. Due to the accident cases reported daily on the major roads in all parts of the countries, more attention is needed for research in the designing an efficient car driving aiding system. In many road accident cases, a major cause of the accident is the driver distraction and failure to react in time or negligence of the driver or because of failure of braking system to stop the vehicle in time. The number of accidents and the effects of collision can be minimized by developing effective braking systems.
+### Introduction
+
+    Safety is a necessary part of man’s life. According to the report of NCRB of India 3,54,796 cases of road accidents reported during 2020 in which more than 60% of road accidents were caused due to over-speeding. In many road accident cases, a major cause of the accident is the driver distraction and failure to react in time or negligence of the driver or because of failure of braking system to stop the vehicle in time. The number of accidents and the effects of collision can be minimized by reducing the total stopping distance by the developments of automatic braking systems which has led to significant safety in driving. This can be done by systems like Automatic Braking Systems which can be useful as well as helpful. We make use of deep neural network for the efficient and effective speed control and braking.
+
+### Objectives
 
     The purpose of Automatic Braking and Speed Control (ABSC) System is to develop an automated control system that would maintain a safe driving distance from obstacles while driving. This project focuses on developing control system based on Deep Neural Network for speed control of vehicle to curb road accidents and effectively assure safety and stress-free driving.
 
-    ABSC System basically controls the speed of the vehicle by continuously feeding the driving atmosphere to the pre-trained deep neural network as digital image captured by the camera sensor. The vehicle is attached with camera which will continuously capture the frames. Each frame from the video is extracted and a series of preprocessing steps are done. It consists of the steps like converting the colored image to gray scale, getting only the region of interest from the image, feature extraction etc. The preprocessed image is given as input to the Convolutional Neural Network where it is convoluted and max pooled. There are series of convolution is done on the image. The features from image are finally taken into the fully connected layers which predicts the speed and the amount of brake to be applied. It is then displayed on the interface which alerts the driver to reduce the speed according to the prediction and waits for the user response. If it doesn't get any input from the user, vehicle’s controller unit automatically signals the actuator unit to apply required amount of brake as predicted by neural network.
+### Methodology
 
-    The braking system based on the deep learning is intelligent way of brake control which exhibits desirable and consistent brake control behavior for various scenarios where behavior of the pedestrian is uncertain. It can reduce the velocity of the vehicle automatically when a threatening obstacle is detected. The autonomous braking offers safe and comfortable brake control without exhibiting too early or too late braking.
+    Automatic braking and speed control System (ABSC) basically controls the speed of the vehicle by continuously feeding the driving atmosphere to the pre-trained deep neural network as digital image captured by the camera sensor​. The Neural Network predicts the desired speed for that instant. If the predicted speed is less than actual speed of the vehicle, the vehicle’s embedded unit automatically alerts the driver to reduce the speed and waits for the user response. If it doesn’t get any input from the user , the controller will calculate the change in speed between previous and current instants and correspondingly the acceleration. The controller will send signal to the actuator to move the accelerate peddle to attain speed predicted by the NN.
+
+### Steps involved in the process
+
+    <ol>
+    <li> Collect the environment data using Camera sensor </li>
+    <li> Pre-processed the collected image </li>
+    <li> Feed pre-processed image to the AI model </li>
+    <li> Maintain / reduce / increase the speed as predicted by the model </li>
+    </ol>
+
+### Model architecture
+
+    A CNN typically has two layers: a convolutional layer and a fully connected layer.
+    The network architecture consists of 9 layers, including a normalization layer, 5 convolutional layers, and 4 fully connected layers​. The network has about 27 million connections and 250 thousand parameters. The convolutional layers are designed to perform feature extraction, and are chosen empirically through a series of experiments that vary layer configurations. We then use strided convolutions in the first three convolutional layers with a 2×2 stride and a 5×5 kernel, and a non-strided.convolution with a 3×3 kernel size in the final two convolutional layers. Each layer is introduced with non-linearity with ReLU activation function and  the output layer consists of log SoftMax function for multi-class classification. The output will be any one of the range between 0-5, 5-15, 15-25, 25-35, more than 35.
